@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $0 <input_directory> <output_directory>"
+    echo "Usage: $0 <source_directory> <target_directory>"
     exit 1
 fi
 
@@ -17,9 +17,8 @@ if [ ! -d "$target_dir" ]; then
     mkdir -p "$target_dir"
 fi
 
-files=$(find "$source_dir" -type f)
-
-for file in $files; do
+while IFS= read -r -d '' file; do
+    file_hash=$(shasum -a 256 "$file" | cut -d ' ' -f1)
     filename=$(basename "$file")
     if [ -f "$target_dir/$filename" ]; then
         new_filename="$filename.$(date +%s%N | shasum -a 256 | base64 | head -c 8 ; echo)"
@@ -27,6 +26,6 @@ for file in $files; do
     else
         cp "$file" "$target_dir/$filename"
     fi
-done
+done < <(find "$source_dir" -type f -print0)
 
 echo "Copying Done! :)"
