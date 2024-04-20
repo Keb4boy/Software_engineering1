@@ -22,13 +22,11 @@ files=$(find "$source_dir" -type f)
 for file in $files; do
     filename=$(basename "$file")
     if [ -f "$target_dir/$filename" ]; then
-        new_filename="$filename.$(date +%s%N | sha256sum | base64 | head -c 8 ; echo)"
+        new_filename="$filename.$(date +%s%N | shasum -a 256 | base64 | head -c 8 ; echo)"
         cp "$file" "$target_dir/$new_filename"
     else
         cp "$file" "$target_dir/$filename"
     fi
 done
 
-echo "Coping Done! :)"
-
-
+echo "Copying Done! :)"
