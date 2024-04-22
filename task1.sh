@@ -4,7 +4,7 @@ if [ $# -ne 2 ]; then
     echo "Usage: $0 <source_directory> <target_directory>"
     exit 1
 fi
-
+awdyufgvadshjbvasdfv
 source_dir="$1"
 target_dir="$2"
 
